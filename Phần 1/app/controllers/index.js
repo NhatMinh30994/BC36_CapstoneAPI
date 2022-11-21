@@ -40,19 +40,21 @@ function renderProductList(data) {
   document.querySelector(".productsList").innerHTML = content;
 }
 
-// Phần render theo select (từ 44-56) chưa đc
 function renderTypeMobile(data) {
   var content = "<option value='all'>Tất cả</option>";
-  var item = data[0].type;
+  var result = {};
   for (var i = 0; i < data.length; i++) {
-    if (item === data[i].type) {
-      content += `<option>${data[i].type}</option> `;
-    } else {
-      item = data[i].type;
+    if (!result[data[i].type]) {
+      result[data[i].type] = [];
+      content += `<option value='${data[i].type}'>${data[i].type}</option>`;
     }
+    console.log(result);
   }
+
   domId("productInput").innerHTML = content;
 }
+
+// Làm Phần tìm đối tượng
 
 domId("productInput").onchange = function (event) {
   console.log(event.target.value);
