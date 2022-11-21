@@ -46,12 +46,9 @@ function renderTypeMobile(data) {
   var item = data[0].type;
   for (var i = 0; i < data.length; i++) {
     if (item === data[i].type) {
-      continue;
+      content += `<option>${data[i].type}</option> `;
     } else {
       item = data[i].type;
-      content += `
-                            <option>${data[i].type}</option>
-                        `;
     }
   }
   domId("productInput").innerHTML = content;
