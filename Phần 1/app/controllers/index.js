@@ -1,21 +1,21 @@
 var productService = new ProductService();
 
-function domId(id){
-    return document.getElementById(id);
+function domId(id) {
+  return document.getElementById(id);
 }
 
-function getProductList(){
-    productService.getList().then(function(response){
-        // console.log(response);
-        renderProductList(response.data);
-        renderTypeMobile(response.data);
-    })
+function getProductList() {
+  productService.getList().then(function (response) {
+    // console.log(response);
+    renderProductList(response.data);
+    renderTypeMobile(response.data);
+  });
 }
 
-function renderProductList(data){
-    var content = "";
-    for (var i = 0; i < data.length; i++){
-        content += `
+function renderProductList(data) {
+  var content = "";
+  for (var i = 0; i < data.length; i++) {
+    content += `
         <div class="product-item">
             <div class="product-tumb">
                 <img src="${data[i].img}">
@@ -35,40 +35,41 @@ function renderProductList(data){
                 </div>
             </div>
         </div>
-        ` 
-    }
-    document.querySelector(".productsList").innerHTML = content;
+        `;
+  }
+  document.querySelector(".productsList").innerHTML = content;
 }
 
 // Phần render theo select (từ 44-56) chưa đc
-function renderTypeMobile(data){
-    var content = "<option>Chọn loại</option>";
-    for (var i = 0; i < data.length; i++){
-        content += `
-            <option>${data[i].type}</option>
-        `
+function renderTypeMobile(data) {
+  var content = "<option value='all'>Tất cả</option>";
+  var item = data[0].type;
+  for (var i = 0; i < data.length; i++) {
+    if (item === data[i].type) {
+      continue;
+    } else {
+      item = data[i].type;
+      content += `
+                            <option>${data[i].type}</option>
+                        `;
     }
-    domId("productInput").innerHTML = content;
+  }
+  domId("productInput").innerHTML = content;
 }
 
-domId("productInput").onchange = function (event){
-    console.log(event.target.value)
-}
+domId("productInput").onchange = function (event) {
+  console.log(event.target.value);
+};
 
-
-
-window.onload = function(){
-    getProductList();
-}
-
-
-
+window.onload = function () {
+  getProductList();
+};
 
 // Icon giỏ hàng
-document.querySelector(".cart-icon").onclick = function(){
-    document.querySelector(".cart").style.right = "0";
-}
+document.querySelector(".cart-icon").onclick = function () {
+  document.querySelector(".cart").style.right = "0";
+};
 
-document.querySelector(".fa-xmark").onclick = function(){
-    document.querySelector(".cart").style.right = "-100%";
-}
+document.querySelector(".fa-xmark").onclick = function () {
+  document.querySelector(".cart").style.right = "-100%";
+};
