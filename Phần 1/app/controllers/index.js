@@ -13,6 +13,7 @@ function getProductList() {
 }
 
 function renderProductList(data) {
+  // console.log(data);
   var content = "";
   for (var i = 0; i < data.length; i++) {
     content += `
@@ -39,25 +40,41 @@ function renderProductList(data) {
   }
   document.querySelector(".productsList").innerHTML = content;
 }
+var result = {};
 
-function renderTypeMobile(data) {
+var renderTypeMobile = function (data) {
   var content = "<option value='all'>Tất cả</option>";
-  var result = {};
   for (var i = 0; i < data.length; i++) {
     if (!result[data[i].type]) {
       result[data[i].type] = [];
       content += `<option value='${data[i].type}'>${data[i].type}</option>`;
     }
-    console.log(result);
+    result[data[i].type].push(data[i]);
   }
 
+  // console.log(result);
+
   domId("productInput").innerHTML = content;
-}
+  // console.log(data);
+};
 
 // Làm Phần tìm đối tượng
 
 domId("productInput").onchange = function (event) {
-  console.log(event.target.value);
+  var type = event.target.value;
+  // console.log(type);
+  if (type === "samsung") {
+    var showType = result.samsung;
+  }
+  if (type === "iphone") {
+    var showType = result.iphone;
+  }
+  if (type === "all") {
+    var showType = [...result.samsung, ...result.iphone];
+  }
+
+  renderProductList(showType);
+  console.log(showType);
 };
 
 window.onload = function () {
