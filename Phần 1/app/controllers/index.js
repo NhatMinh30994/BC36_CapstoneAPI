@@ -58,28 +58,31 @@ var renderTypeMobile = function (data) {
   // console.log(data);
 };
 
-// Làm Phần tìm đối tượng
-
 domId("productInput").onchange = function (event) {
   var type = event.target.value;
   // console.log(type);
+
   if (type === "samsung") {
     var showType = result.samsung;
   }
+
   if (type === "iphone") {
     var showType = result.iphone;
   }
+
   if (type === "all") {
     var showType = [...result.samsung, ...result.iphone];
   }
 
   renderProductList(showType);
-  console.log(showType);
+  // console.log(showType);
 };
 
 window.onload = function () {
   getProductList();
 };
+
+//
 
 // Icon giỏ hàng
 document.querySelector(".cart-icon").onclick = function () {
