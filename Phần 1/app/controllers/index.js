@@ -36,7 +36,7 @@ function renderProductList(data) {
                 </div>
                 <div class="product-bottom-details">
                     <div class="product-price">${data[i].price}</div>
-                    <button type="button" class="btn btn-primary" onclick="addCart('${data[i].id}')">Thêm</button>
+                    <button type="button" class="btn btn-primary" onclick="createCartItem('${data[i].id}')">Thêm</button>
                 </div>
             </div>
         </div>
@@ -44,19 +44,19 @@ function renderProductList(data) {
   }
   document.querySelector(".productsList").innerHTML = content;
 }
-var result = {};
+var typeMobile = {};
 
 function renderTypeMobile(data) {
   var content = "<option value='all'>Tất cả</option>";
   for (var i = 0; i < data.length; i++) {
-    if (!result[data[i].type]) {
-      result[data[i].type] = [];
+    if (!typeMobile[data[i].type]) {
+      typeMobile[data[i].type] = [];
       content += `<option value='${data[i].type}'>${data[i].type}</option>`;
     }
-    result[data[i].type].push(data[i]);
+    typeMobile[data[i].type].push(data[i]);
   }
 
-  // console.log(result);
+  // console.log(typeMobile);
 
   domId("productInput").innerHTML = content;
   // console.log(data);
@@ -67,15 +67,15 @@ domId("productInput").onchange = function (event) {
   // console.log(type);
 
   if (type === "samsung") {
-    var showType = result.samsung;
+    var showType = typeMobile.samsung;
   }
 
   if (type === "iphone") {
-    var showType = result.iphone;
+    var showType = typeMobile.iphone;
   }
 
   if (type === "all") {
-    var showType = [...result.samsung, ...result.iphone];
+    var showType = [...typeMobile.samsung, ...typeMobile.iphone];
   }
 
   renderProductList(showType);
@@ -86,53 +86,115 @@ window.onload = function () {
   getProductList();
 };
 
-// Phần Giỏ hàng
+// Phần Giỏ hàng chưa hoàn thành dòng 91 - 136
 
-var cartProductID = [];
+var cartItemList = [];
 
-var quarity = 0;
-function addCart(id) {
-  for (var i = 0; i < productsList.length; i++) {
-    if (productsList[i].id === id) {
-      if (!cartProductID[i]) {
-        quarity++;
-        var cartItem = new CartItem(
-          productsList[i].id,
-          productsList[i].name,
-          productsList[i].price,
-          quarity
-        );
-
-        cartProductID.push(cartItem);
-      }
-      if (cartProductID[i]) {
-      }
-    }
-  }
-  renderCart(cartProductID);
+function cleanProduct() {
+  cartItemList = [];
+  renderCart();
 }
 
-function renderCart(cart) {
-  var content = ``;
-  for (var i = 0; i < cart.length; i++) {
-    content += `
+function createCartItem(id) {
+  for (var i = 0; i < productsList.length; i++) {
+    if (productsList[i].id === id) {
+      var quantity = 1;
+      if (cartItemList) {
+        for (var j = 0; j < cartItemList.length; j++) {
+          if (cartItemList[j].id === id) {
+            cartItemList[j].quantity += 1;
+            renderCart();
+            return;
+          }
+        }
+      }
+      var cartItemId = productsList[i].id;
+      var cartItemName = productsList[i].name;
+      var cartItemPrice = productsList[i].price;
+    }
+  }
+
+  var cartItem = new CartItem(
+    cartItemId,
+    cartItemName,
+    cartItemPrice,
+    quantity
+  );
+  cartItemList.push(cartItem);
+  renderCart();
+}
+
+function renderCart() {
+  var content = "";
+  if (!cartItemList) {
+    domId("tableCartProduct").innerHTML = content;
+    return;
+  }
+  if (cartItemList) {
+    for (var i = 0; i < cartItemList.length; i++) {
+      content += `
     <tr>
     <td>
       <img src="https://cdn.tgdd.vn/Products/Images/42/114115/iphone-x-64gb-hh-600x600.jpg" alt="">
     </td>
-    <td>${cart[i].name}</td>
+    <td>${cartItemList[i].name}</td>
     <td>
-      <input style="width: 50px" type="number" name="" id="${
-        cart[i].quarity
-      }" value="1" min="0" data-dashlane-rid="fff27122747b9aab" data-form-type="other">
+      <input style="width: 50px" type="number" 
+      id="${cartItemList[i].id}"
+      onchange="setQuantity(${cartItemList[i].id})"
+      value="${cartItemList[i].quantity}"
+      min="0" data-dashlane-rid="fff27122747b9aab" data-form-type="other">
     </td>
-    <td>${cart[i].totalPay()}</td>
-    <td>Xóa</td>
-  </tr>
+    <td class="totalPrice">${cartItemList[i].totalPrice()}</td>
+    <td>
+    <button onclick="deleteCartItem(${
+      cartItemList[i].id
+    })" class="btn btn-primary">Xóa</button>
+    </td>   
+    </tr>
     `;
+    }
   }
 
   domId("tableCartProduct").innerHTML = content;
+
+  renderPay();
+}
+
+function setQuantity(id) {
+  var quantityValue = +domId(id).value;
+  id = id.toString();
+  if (quantityValue <= 0) {
+    deleteCartItem(id);
+  }
+  for (var i = 0; i < cartItemList.length; i++) {
+    if (cartItemList[i].id === id) {
+      cartItemList[i].quantity = quantityValue;
+      // console.log(cartItemList[i].quantity);
+    }
+  }
+  renderCart();
+}
+
+function deleteCartItem(id) {
+  id = id.toString();
+
+  for (var i = 0; i < cartItemList.length; i++) {
+    if (cartItemList[i].id === id) {
+      var index = i;
+      cartItemList.splice(index, 1);
+      console.log(cartItemList);
+    }
+  }
+  renderCart();
+}
+
+function renderPay() {
+  var totalPrice = 0;
+  for (var i = 0; i < cartItemList.length; i++) {
+    totalPrice += cartItemList[i].totalPrice();
+  }
+  domId("totalPay").innerHTML = totalPrice;
 }
 
 // Icon giỏ hàng

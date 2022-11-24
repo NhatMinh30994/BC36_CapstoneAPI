@@ -3,18 +3,18 @@
  * @param {string} id  Mã sản phẩm
  * @param {number} price Giá
  * @param {string} name Tên
- * @param {number} quarity Số lượng
+ * @param {number} quantity Số lượng
  */
 
-function CartItem(id, name, price, quarity) {
+function CartItem(id, name, price, quantity) {
   this.id = id;
   this.name = name;
   this.price = price;
-  this.quarity = quarity;
+  this.quantity = quantity;
 
   // Tổn tiền
 
-  this.totalPay = function () {
-    return (this.totalPay = this.price * this.quarity);
+  this.totalPrice = function () {
+    return this.price * this.quantity;
   };
 }
