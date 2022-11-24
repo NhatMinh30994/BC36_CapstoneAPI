@@ -55,7 +55,6 @@ function renderTypeMobile(data) {
     }
     typeMobile[data[i].type].push(data[i]);
   }
-
   // console.log(typeMobile);
 
   domId("productInput").innerHTML = content;
@@ -84,6 +83,7 @@ domId("productInput").onchange = function (event) {
 
 window.onload = function () {
   getProductList();
+  getCart();
 };
 
 // Phần Giỏ hàng chưa hoàn thành dòng 91 - 136
@@ -104,12 +104,14 @@ function createCartItem(id) {
           if (cartItemList[j].id === id) {
             cartItemList[j].quantity += 1;
             renderCart();
+            saveCart();
             return;
           }
         }
       }
       var cartItemId = productsList[i].id;
       var cartItemName = productsList[i].name;
+      var cartItemImgURL = productsList[i].img;
       var cartItemPrice = productsList[i].price;
     }
   }
@@ -117,11 +119,13 @@ function createCartItem(id) {
   var cartItem = new CartItem(
     cartItemId,
     cartItemName,
+    cartItemImgURL,
     cartItemPrice,
     quantity
   );
   cartItemList.push(cartItem);
   renderCart();
+  saveCart();
 }
 
 function renderCart() {
@@ -135,7 +139,7 @@ function renderCart() {
       content += `
     <tr>
     <td>
-      <img src="https://cdn.tgdd.vn/Products/Images/42/114115/iphone-x-64gb-hh-600x600.jpg" alt="">
+      <img src="${cartItemList[i].imgURL}" alt="">
     </td>
     <td>${cartItemList[i].name}</td>
     <td>
@@ -174,6 +178,8 @@ function setQuantity(id) {
     }
   }
   renderCart();
+
+  saveCart();
 }
 
 function deleteCartItem(id) {
@@ -187,6 +193,8 @@ function deleteCartItem(id) {
     }
   }
   renderCart();
+
+  saveCart();
 }
 
 function renderPay() {
@@ -195,6 +203,41 @@ function renderPay() {
     totalPrice += cartItemList[i].totalPrice();
   }
   domId("totalPay").innerHTML = totalPrice;
+}
+
+//Phần save cart vao localStorage 202 - 203
+
+function saveCart() {
+  var cartItemListJSON = JSON.stringify(cartItemList);
+  localStorage.setItem("CartLocal", cartItemListJSON);
+}
+
+function getCart() {
+  var cartItemListJSON = localStorage.getItem("CartLocal");
+  if (!cartItemListJSON) return;
+  var cartItemListLocal = JSON.parse(cartItemListJSON);
+
+  cartItemList = mapCartLocal(cartItemListLocal);
+
+  renderCart();
+}
+
+function mapCartLocal(data) {
+  var result = [];
+
+  for (var i = 0; i < data.length; i++) {
+    var oldCartItem = data[i];
+    var newCartItem = new CartItem(
+      oldCartItem.id,
+      oldCartItem.name,
+      oldCartItem.imgURL,
+      oldCartItem.price,
+      oldCartItem.quantity
+    );
+    result.push(newCartItem);
+  }
+
+  return result;
 }
 
 // Icon giỏ hàng
