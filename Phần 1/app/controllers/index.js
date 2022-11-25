@@ -21,24 +21,26 @@ function renderProductList(data) {
   var content = "";
   for (var i = 0; i < data.length; i++) {
     content += `
-        <div class="product-item">
-            <div class="product-tumb">
-                <img src="${data[i].img}">
-            </div>
-            <div class="product-details">
-                <div class="product-info">
-                    <span class="product-catagory">${data[i].type}</span>
-                    <h4>${data[i].name}</h4>
-                    <p>${data[i].desc}</p>
-                    <p>${data[i].screen}</p>
-                    <p>${data[i].backCamera}</p>
-                    <p>${data[i].frontCamera}</p>
-                </div>
-                <div class="product-bottom-details">
-                    <div class="product-price">${data[i].price}</div>
-                    <button type="button" class="btn btn-primary" onclick="createCartItem('${data[i].id}')">Thêm</button>
-                </div>
-            </div>
+      <div class="col-3">
+          <div class="product-item">
+              <div class="product-tumb">
+                  <img src="${data[i].img}">
+              </div>
+              <div class="product-details">
+                  <div class="product-info">
+                      <span class="product-catagory">${data[i].type}</span>
+                      <h4>${data[i].name}</h4>
+                      <p>${data[i].desc}</p>
+                      <p>${data[i].screen}</p>
+                      <p>${data[i].backCamera}</p>
+                      <p>${data[i].frontCamera}</p>
+                  </div>
+                  <div class="product-bottom-details">
+                      <div class="product-price">${data[i].price}</div>
+                      <button type="button" class="btn btn-primary" onclick="createCartItem('${data[i].id}')">Thêm</button>
+                  </div>
+              </div>
+          </div>
         </div>
         `;
   }
@@ -147,13 +149,13 @@ function renderCart() {
       id="${cartItemList[i].id}"
       onchange="setQuantity(${cartItemList[i].id})"
       value="${cartItemList[i].quantity}"
-      min="0" data-dashlane-rid="fff27122747b9aab" data-form-type="other">
+      min="1" data-dashlane-rid="fff27122747b9aab" data-form-type="other">
     </td>
     <td class="totalPrice">${cartItemList[i].totalPrice()}</td>
     <td>
     <button onclick="deleteCartItem(${
       cartItemList[i].id
-    })" class="btn btn-primary">Xóa</button>
+    })" class="btn btn-danger">Xóa</button>
     </td>   
     </tr>
     `;
