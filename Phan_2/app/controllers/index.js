@@ -6,6 +6,9 @@ function domId(id) {
 
 function getProductList() {
   productService.getList().then(function (response) {
+    for (var i = 0; i < response.data.length; i++) {
+      productsList.push(response.data[i]);
+    }
     renderProductList(response.data);
   });
 }
@@ -114,6 +117,24 @@ function deleteProduct(id) {
     alert("Xóa sản phẩm thành công");
     getProductList();
   });
+}
+
+// Phần tìm kiếm
+var productsList = [];
+
+function search() {
+  var result = [];
+  var keyword = domId("searchMobile").value;
+
+  for (var i = 0; i < productsList.length; i++) {
+    var perName = productsList[i].name;
+    var perType = productsList[i].description;
+
+    if (perName.includes(keyword) || perType.includes(keyword)) {
+      result.push(productsList[i]);
+    }
+  }
+  renderProductList(result);
 }
 
 // === Validation ===
