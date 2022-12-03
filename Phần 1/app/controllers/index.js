@@ -21,7 +21,7 @@ function renderProductList(data) {
   var content = "";
   for (var i = 0; i < data.length; i++) {
     content += `
-      <div class="col-3">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 product-bg">
           <div class="product-item">
               <div class="product-tumb">
                   <img src="${data[i].img}">

@@ -1,0 +1,15 @@
+@media (min-width: 768px) {
+  .cart {
+    width: 60%;
+  }
+}
+@media (min-width: 992px) {
+  .cart {
+    width: 50%;
+  }
+}
+@media (min-width: 1200px) {
+  .cart {
+    width: 35%;
+  }
+}
