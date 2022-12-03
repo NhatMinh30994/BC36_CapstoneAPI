@@ -39,6 +39,7 @@ domId("btnThemSP").onclick = function () {
   document.querySelector(".modal-title").innerHTML = "Thêm sản phẩm";
   document.querySelector(".modal-footer").innerHTML =
     "<button onclick='addProduct()' class='btn btn-primary'>Thêm</button>";
+  resetForm();
 };
 
 function validateForm() {
@@ -61,6 +62,7 @@ function validateForm() {
 }
 
 function addProduct() {
+  openForm();
   var isValid = validateForm();
   if (!isValid) return;
 
@@ -94,9 +96,9 @@ function openUpdateModal(id) {
 }
 
 function updateProduct(id) {
+  openForm();
   var isValid = validateForm();
   if (!isValid) return;
-  c;
 
   var product = new Product(name, price, image, description);
 
@@ -134,6 +136,13 @@ function resetForm() {
   domId("priceProduct").style.display = "none";
   domId("imgProduct").style.display = "none";
   domId("descProduct").style.display = "none";
+}
+
+function openForm() {
+  domId("nameProduct").style.display = "block";
+  domId("priceProduct").style.display = "block";
+  domId("imgProduct").style.display = "block";
+  domId("descProduct").style.display = "block";
 }
 
 function checkLength(value, spanId, min, max) {
