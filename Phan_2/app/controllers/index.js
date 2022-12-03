@@ -103,6 +103,11 @@ function updateProduct(id) {
   var isValid = validateForm();
   if (!isValid) return;
 
+  var name = domId("TenSP").value;
+  var price = domId("GiaSP").value;
+  var image = domId("HinhSP").value;
+  var description = domId("loaiSP").value;
+
   var product = new Product(name, price, image, description);
 
   productService.updateProduct(id, product).then(function () {
