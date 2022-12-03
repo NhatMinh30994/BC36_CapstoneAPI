@@ -36,7 +36,7 @@ function renderProductList(data) {
                       <p>${data[i].frontCamera}</p>
                   </div>
                   <div class="product-bottom-details">
-                      <div class="product-price">${data[i].price}</div>
+                      <div class="product-price">${data[i].price}$</div>
                       <button type="button" class="btn btn-primary" onclick="createCartItem('${data[i].id}')">Thêm</button>
                   </div>
               </div>
@@ -204,7 +204,7 @@ function renderPay() {
   for (var i = 0; i < cartItemList.length; i++) {
     totalPrice += cartItemList[i].totalPrice();
   }
-  domId("totalPay").innerHTML = totalPrice;
+  domId("totalPay").innerHTML = totalPrice + "$";
 }
 
 //Phần save cart vao localStorage 202 - 203
